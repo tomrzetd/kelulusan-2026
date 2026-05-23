@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#090a0f">
+<title>PENGUMUMAN KELULUSAN :: SYS.2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & CYBERDECK BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg-main: #06080e;
+  --bg-panel: rgba(10, 15, 25, 0.85);
+  --neon-cyan: #00f3ff;
+  --neon-magenta: #bc13fe;
+  --neon-green: #39ff14;
+  --neon-red: #ff003c;
+  --neon-gold: #ffcf00;
+  --text-main: #e0f8ff;
+  --text-muted: #6b8ea5;
+  --font-hud: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --clip-angle: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: var(--font-hud);
+  background-color: var(--bg-main);
+  /* Cyber Grid Background */
+  background-image: 
+    linear-gradient(rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center center;
+  color: var(--text-main);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; overflow-x: hidden;
+  position: relative;
+}
+
+/* Scanline Effect */
+body::after {
+  content: " ";
+  display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2; background-size: 100% 4px, 6px 100%; pointer-events: none;
+}
+
+.app {
+  width: 100%; max-width: 500px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 243, 255, 0.05);
+  min-height: 85vh; margin: 16px; 
+  display: flex; flex-direction: column;
+  position: relative; z-index: 10;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 25px), calc(100% - 25px) 100%, 0 100%);
+}
+
+/* Decorative HUD lines */
+.app::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+}
+.app::after {
+  content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-magenta), transparent);
+}
+
+header { 
+  padding: 20px 24px; 
+  border-bottom: 1px solid rgba(0, 243, 255, 0.2); 
+  display: flex; align-items: center; gap: 16px; position: relative; 
+}
+.logo { 
+  width: 50px; height: 50px; 
+  background: rgba(0, 243, 255, 0.1); 
+  border: 1px solid var(--neon-cyan);
+  display: flex; align-items: center; justify-content: center; 
+  font-size: 1.5rem; color: var(--neon-cyan);
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  text-shadow: 0 0 10px var(--neon-cyan);
+}
+.header-text h1 { 
+  font-size: 1.3rem; font-weight: 700; letter-spacing: 2px;
+  color: var(--text-main); text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(224, 248, 255, 0.5);
+}
+.header-text p { font-size: 0.75rem; color: var(--neon-cyan); font-family: var(--font-mono); letter-spacing: 1px; }
+
+/* Overlay Login */
+.overlay { 
+  position: absolute; inset: 0; 
+  background: var(--bg-main); 
+  z-index: 100; display: flex; justify-content: center; align-items: center; padding: 24px; 
+  background-image: radial-gradient(circle at center, rgba(0,243,255,0.1) 0%, transparent 60%);
+}
+.login-box { 
+  width: 100%; max-width: 400px; 
+  text-align: center; 
+  position: relative; 
+  animation: hudRise 0.6s cubic-bezier(0.1, 1, 0.1, 1);
+}
+@keyframes hudRise { 0%{opacity:0;transform:translateY(40px) scale(0.95)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+
+.sys-icon {
+  font-size: 3.5rem; color: var(--neon-cyan);
+  margin-bottom: 10px; text-shadow: 0 0 20px var(--neon-cyan);
+}
+.login-box h2 { font-weight: 700; font-size: 1.6rem; letter-spacing: 2px; margin-bottom: 5px; color: #fff; }
+.login-box > p { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 30px; }
+.login-box > p strong { color: var(--neon-magenta); }
+
+.input-group { position: relative; margin-bottom: 25px; }
+.login-input { 
+  width: 100%; padding: 16px 20px; 
+  background: rgba(0, 0, 0, 0.5); 
+  border: 1px solid rgba(0, 243, 255, 0.3); 
+  border-radius: 0; color: var(--neon-cyan);
+  font-family: var(--font-mono); font-size: 1.2rem; text-align: center; 
+  transition: var(--transition); outline: none; letter-spacing: 2px;
+}
+.login-input:focus { 
+  border-color: var(--neon-cyan); 
+  box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.2), 0 0 15px rgba(0, 243, 255, 0.2); 
+}
+.login-input::placeholder { color: rgba(107, 142, 165, 0.5); letter-spacing: normal; }
+/* Decorative corners for input */
+.input-group::before, .input-group::after {
+  content: ''; position: absolute; width: 10px; height: 10px; border: 2px solid var(--neon-cyan); pointer-events: none; transition: var(--transition);
+}
+.input-group::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.input-group::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+.login-input:focus ~ .input-group::before, .login-input:focus ~ .input-group::after { width: 100%; height: 100%; opacity: 0.2; }
+
+.btn { 
+  width: 100%; padding: 18px; 
+  background: rgba(0, 243, 255, 0.1); 
+  border: 1px solid var(--neon-cyan); color: var(--neon-cyan); 
+  font-family: var(--font-mono); font-weight: 700; font-size: 1rem; letter-spacing: 2px;
+  cursor: pointer; transition: var(--transition); 
+  position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px;
+  clip-path: var(--clip-angle);
+  text-transform: uppercase;
+}
+.btn:hover { 
+  background: var(--neon-cyan); color: #000; 
+  box-shadow: 0 0 20px var(--neon-cyan); 
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { border-color: var(--text-muted); color: var(--text-muted); background: transparent; cursor: not-allowed; box-shadow: none; }
+.btn-outline { background: transparent; border: 1px dashed var(--neon-magenta); color: var(--neon-magenta); margin-top: 24px; }
+.btn-outline:hover { background: rgba(188, 19, 254, 0.1); box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); color: #fff; }
+
+/* Loading Screen HUD */
+#loading-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; display: none; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+.hud-spinner {
+  width: 100px; height: 100px; position: relative; margin-bottom: 30px;
+}
+.hud-spinner-circle {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid transparent; border-top-color: var(--neon-cyan); border-bottom-color: var(--neon-magenta);
+  animation: spinHUD 1.5s linear infinite;
+}
+.hud-spinner-circle:nth-child(2) { inset: 15px; border-top-color: var(--neon-magenta); border-bottom-color: var(--neon-cyan); animation-duration: 2s; animation-direction: reverse; }
+.hud-spinner-circle:nth-child(3) { inset: 30px; border-top-color: var(--neon-gold); border-bottom-color: transparent; border-style: dashed; animation-duration: 3s; }
+@keyframes spinHUD { to { transform: rotate(360deg); } }
+.loading-text { font-family: var(--font-mono); font-size: 1.2rem; color: var(--neon-cyan); letter-spacing: 3px; animation: glitchText 1.5s infinite; text-transform: uppercase; }
+@keyframes glitchText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; text-shadow: 2px 0 var(--neon-magenta); } }
+.loading-subtext { color: var(--text-muted); font-family: var(--font-mono); margin-top: 10px; font-size: 0.85rem; }
+
+/* Main Content Area */
+.chat-area { flex: 1; padding: 20px; position: relative; z-index: 5; overflow-y: auto; }
+.chat-area::-webkit-scrollbar { width: 6px; }
+.chat-area::-webkit-scrollbar-thumb { background: var(--neon-cyan); }
+
+.result-card { 
+  background: rgba(0, 0, 0, 0.6); 
+  border: 1px solid rgba(0, 243, 255, 0.2); 
+  padding: 30px 20px; text-align: center; 
+  position: relative; animation: glitchEntrance 0.5s ease-out;
+  box-shadow: inset 0 0 30px rgba(0, 243, 255, 0.05);
+}
+.result-card::before, .result-card::after {
+  content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--neon-cyan); pointer-events: none;
+}
+.result-card::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+.result-card::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+@keyframes glitchEntrance { 
+  0% { transform: scale(1.05); opacity: 0; filter: contrast(200%) hue-rotate(90deg); } 
+  50% { filter: contrast(150%) hue-rotate(-90deg); }
+  100% { transform: scale(1); opacity: 1; filter: none; } 
+}
+
+/* Cyber Photo Frame */
+.foto-wrapper { position: relative; width: 130px; height: 130px; margin: 0 auto 24px; }
+.foto-wrapper::before {
+  content: ''; position: absolute; inset: -5px; border: 1px solid var(--neon-magenta); border-radius: 50%; border-style: dashed; animation: spinHUD 10s linear infinite;
+}
+.foto { 
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  border: 2px solid var(--neon-cyan);
+  filter: contrast(110%) saturate(120%);
+  position: relative; z-index: 2;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+.nama { font-size: 1.8rem; font-weight: 700; color: #fff; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+.detail { 
+  font-family: var(--font-mono); color: var(--neon-cyan); 
+  margin: 10px 0 20px; display: inline-flex; align-items: center; gap: 12px; 
+  padding: 8px 16px; background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2);
+  font-size: 0.9rem; letter-spacing: 1px;
+}
+
+.nilai-box { 
+  background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(188, 19, 254, 0.3);
+  padding: 20px; margin: 24px 0; position: relative;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.nilai-label { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; letter-spacing: 2px; }
+.nilai { font-family: var(--font-mono); font-size: 3.5rem; font-weight: 700; color: var(--neon-magenta); text-shadow: 0 0 15px rgba(188, 19, 254, 0.5); line-height: 1; }
+
+.status { 
+  padding: 16px; font-weight: 700; font-size: 1.3rem; letter-spacing: 2px;
+  display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; 
+  text-transform: uppercase; border: 1px solid transparent; background: rgba(0,0,0,0.5);
+  font-family: var(--font-mono); position: relative; overflow: hidden;
+}
+.status::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: scanGlare 3s infinite; }
+@keyframes scanGlare { 0% { left: -100%; } 100% { left: 200%; } }
+
+.status.lulus { color: var(--neon-green); border-color: var(--neon-green); text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); box-shadow: inset 0 0 20px rgba(57, 255, 20, 0.1); }
+.status.tidak-lulus { color: var(--neon-red); border-color: var(--neon-red); text-shadow: 0 0 10px rgba(255, 0, 60, 0.5); box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.1); }
+
+.badge-container { display: flex; justify-content: center; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
+.badge { 
+  padding: 6px 12px; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 1px;
+  display: flex; align-items: center; gap: 6px; 
+  background: rgba(0,0,0,0.6); text-transform: uppercase;
+}
+.badge.prestasi { color: var(--neon-gold); border: 1px solid var(--neon-gold); }
+.badge.akademik { color: var(--neon-cyan); border: 1px solid var(--neon-cyan); }
+.badge.karakter { color: var(--neon-magenta); border: 1px solid var(--neon-magenta); }
+
+.action-buttons { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.btn-action { 
+  flex: 1; min-width: 130px; padding: 12px; 
+  font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;
+  cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; color: #fff; border: 1px solid #fff; text-transform: uppercase;
+}
+.btn-action:hover { background: #fff; color: #000; }
+.btn-action.share { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+.btn-action.share:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+.btn-action.download { border-color: var(--neon-green); color: var(--neon-green); }
+.btn-action.download:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
+.btn-action.celebrate { border-color: var(--neon-gold); color: var(--neon-gold); }
+.btn-action.celebrate:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px var(--neon-gold); }
+
+.encouragement { 
+  background: rgba(255, 0, 60, 0.05); border: 1px dashed var(--neon-red); 
+  padding: 20px; margin: 20px 0; text-align: left; position: relative;
+}
+.encouragement::before { content: '!'; position: absolute; right: 20px; top: 20px; font-size: 3rem; color: rgba(255,0,60,0.1); font-family: var(--font-mono); }
+.encouragement h4 { color: var(--neon-red); margin-bottom: 8px; font-size: 1.1rem; font-family: var(--font-mono); letter-spacing: 1px; text-transform: uppercase; }
+.encouragement p { color: #fff; font-size: 0.9rem; line-height: 1.5; font-family: var(--font-mono); }
+
+.footer { text-align: center; padding: 16px 20px; font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-muted); border-top: 1px solid rgba(0, 243, 255, 0.2); background: rgba(0,0,0,0.4); z-index: 10; letter-spacing: 1px; }
+.footer strong { color: var(--neon-cyan); font-weight: normal; }
+
+#error { 
+  color: var(--neon-red); margin-top: 16px; font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 1px; display: none; padding: 12px; background: rgba(255, 0, 60, 0.1); border: 1px solid var(--neon-red); text-transform: uppercase;
+}
+
+.sound-toggle { 
+  position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; 
+  background: transparent; border: 1px solid var(--neon-cyan); color: var(--neon-cyan);
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; z-index: 15; transition: var(--transition);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.sound-toggle:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px var(--neon-cyan); }
+.sound-toggle.muted { border-color: var(--text-muted); color: var(--text-muted); }
+
+/* Confetti Override for Cyber Theme */
+#confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 99999; overflow: hidden; }
+.confetti { position: absolute; width: 8px; height: 16px; animation: confettiFall linear forwards; opacity: 0; box-shadow: 0 0 5px currentColor; }
+@keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+.firework { position: fixed; width: 4px; height: 4px; border-radius: 50%; pointer-events: none; z-index: 99998; animation: fireworkExplode 1s ease-out forwards; }
+@keyframes fireworkExplode { 0%{transform:scale(1);opacity:1;box-shadow:0 0 0 0 currentColor,0 0 0 0 currentColor,0 0 0 0 currentColor,0 0 0 0 currentColor,0 0 0 0 currentColor} 50%{opacity:1;box-shadow:-30px -30px 0 2px currentColor,30px -30px 0 2px currentColor,-30px 30px 0 2px currentColor,30px 30px 0 2px currentColor,0 -50px 0 2px currentColor} 100%{transform:scale(0);opacity:0} }
+
+@media (max-width: 480px) {
+  .app { margin: 0; border: none; min-height: 100vh; border-radius: 0; clip-path: none; }
+  .login-box { padding: 20px 10px; }
+  .nama { font-size: 1.5rem; } .nilai { font-size: 2.8rem; }
+  .action-buttons { flex-direction: column; } .btn-action { min-width: 100%; }
+}
+
+.animate-fade-in-up { animation: hudRise 0.5s ease-out forwards; }
+.stagger-1{animation-delay:0.1s} .stagger-2{animation-delay:0.2s} .stagger-3{animation-delay:0.3s}
+</style>
+</head>
+<body>
+
+<div id="loading-screen">
+  <div class="hud-spinner">
+    <div class="hud-spinner-circle"></div>
+    <div class="hud-spinner-circle"></div>
+    <div class="hud-spinner-circle"></div>
+  </div>
+  <div class="loading-text" id="loadingMessage">SYS.INIT // SEARCHING...</div>
+  <div class="loading-subtext">[ ENCRYPTED CONNECTION ]</div>
+</div>
+<div id="confetti-container"></div>
+
+<div class="app" id="appCard">
+  <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound" title="Toggle Audio">🔊</button>
+
+  <div class="overlay" id="overlay">
+    <div class="login-box">
+      <div class="sys-icon">⬡</div>
+      <h2>SECURE ACCESS</h2>
+      <p>DATABASE.SYS <strong>2026</strong> // SMP_GEMILANG</p>
+      
+      <div class="input-group">
+        <input type="number" id="nisn" class="login-input" placeholder="[ INPUT NISN ]" autofocus onkeypress="handleKeyPress(event)" aria-label="Nomor Induk Siswa Nasional">
+      </div>
+      
+      <button class="btn" id="btn" onclick="cekKelulusan()"><span>[ INITIATE SCAN ]</span></button>
+      <p id="error" role="alert"></p>
+      
+      <p style="margin-top:30px;font-size:0.75rem;color:var(--text-muted);">
+        <em style="font-style: normal; text-transform: uppercase;">>> Authorized personnel only. Data logging active.</em>
+      </p>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo" aria-hidden="true">❖</div>
+    <div class="header-text">
+      <h1>GRADUATION DATA_LINK</h1>
+      <p>> STATUS: ONLINE | PORTAL_2026</p>
+    </div>
+  </header>
+
+  <div class="chat-area">
+    <div id="hasil" style="display:none;">
+      <div class="result-card" id="resultCard">
+        
+        <div class="foto-wrapper">
+          <img id="foto" class="foto" src="" alt="Avatar" onerror="handleImageError(this)" loading="lazy">
+        </div>
+        
+        <h2 class="nama" id="nama">-</h2>
+        <div class="detail">
+          <span>[ID] <strong id="nisnHasil">-</strong></span>
+          <span style="opacity:0.5;">|</span>
+          <span>[SEC] <strong id="kelas">-</strong></span>
+        </div>
+        
+        <div class="badge-container" id="badgeContainer"></div>
+        
+        <div class="nilai-box">
+          <div class="nilai-label">> ACADEMIC_INDEX_SCORE <</div>
+          <div class="nilai" id="rata">0.00</div>
+        </div>
+        
+        <div id="statusBox" class="status" role="status" aria-live="polite">WAITING VERIFICATION...</div>
+        
+        <div class="action-buttons">
+          <button class="btn-action share" onclick="shareResult()">[ SHARE_DATA ]</button>
+          <button class="btn-action download" onclick="downloadCertificate()">[ EXTRACT_CERT ]</button>
+        </div>
+      </div>
+      
+      <div id="encouragementBox" style="display:none;">
+        <div class="encouragement">
+          <h4>SYSTEM.MESSAGE: KEEP PUSHING</h4>
+          <p>Misi ini mungkin belum berhasil, tapi perang belum usai. Analisis data, perbaiki strategi, dan bersiap untuk fase selanjutnya. You can do this!</p>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="resetApp()">[ NEW_QUERY ]</button>
+    </div>
+  </div>
+  
+  <div class="footer">SYS.VER: 9.0.2 | © 2026 <strong>EDU.NET KEMDIKBUD</strong> | [ CONNECTION_SECURE ]</div>
+</div>
+
+<script>
+// ======================= KONFIGURASI API =======================
+// DIBIARKAN SAMA PERSIS SESUAI LOGIKA ASLI
+const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzTdArNCRV0pgRx8DwOj9ABcIWGiJDJFVaAsHLbQEsfrjDDktg05Cvc0J3RUzNnzFlWGw/exec';
+
+// ======================= UTILITIES =======================
+function handleImageError(imgElement) {
+  const namaSiswa = document.getElementById('nama')?.innerText || 'Siswa';
+  const initials = namaSiswa.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+  // Diubah sedikit warnanya ke tema cyberdeck (Cyan/Dark)
+  imgElement.src = `https://ui-avatars.com/api/?background=00f3ff&color=000&rounded=true&size=140&bold=true&name=${encodeURIComponent(initials)}`;
+  imgElement.onerror = null;
+}
+function handleKeyPress(e) { if (e.key === 'Enter') cekKelulusan(); }
+
+// ======================= LOADING ANIMATION =======================
+let loadingInterval;
+// Teks diganti ala terminal hacking/gaming
+const loadingMessages = ["> CONNECTING TO DATABASE...","> BYPASSING FIREWALL...","> EXTRACTING GRADES...","> ANALYZING ACHIEVEMENTS...","> DECRYPTING RESULT...","> ALMOST THERE..."];
+function startLoadingAnimation() {
+  const msgEl = document.getElementById("loadingMessage");
+  if (!msgEl) return;
+  let idx = 0;
+  msgEl.innerHTML = loadingMessages[idx];
+  loadingInterval = setInterval(() => {
+    idx = (idx + 1) % loadingMessages.length;
+    msgEl.innerHTML = loadingMessages[idx];
+  }, 600); // Lebih cepat seperti terminal
+}
+function stopLoadingAnimation() { if (loadingInterval) clearInterval(loadingInterval); }
+
+// ======================= CONFETTI & FIREWORKS =======================
+function createConfetti(count = 100) {
+  const container = document.getElementById('confetti-container');
+  // Warna disesuaikan dengan tema neon
+  const colors = ['#00f3ff','#bc13fe','#39ff14','#ffcf00']; 
+  const shapes = ['rect','square'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const conf = document.createElement('div');
+      conf.classList.add('confetti');
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const left = Math.random() * 100;
+      const duration = 1.5 + Math.random() * 2;
+      const delay = Math.random() * 0.2;
+      conf.style.cssText = `left:${left}%;width:${4+Math.random()*6}px;height:${8+Math.random()*10}px;background:${color};color:${color};animation:confettiFall ${duration}s ${delay}s linear forwards;opacity:${0.8+Math.random()*0.2}`;
+      container.appendChild(conf);
+      setTimeout(() => conf.remove(), (duration + delay) * 1000 + 200);
+    }, i * 20);
+  }
+}
+function createFirework(x, y) {
+  const colors = ['#00f3ff','#bc13fe','#39ff14','#ffcf00'];
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      const firework = document.createElement('div');
+      firework.classList.add('firework');
+      const offsetX = (Math.random() - 0.5) * 150;
+      const offsetY = (Math.random() - 0.5) * 150;
+      const color = colors[Math.floor(Math.random()*colors.length)];
+      firework.style.cssText = `left:${x+offsetX}px;top:${y+offsetY}px;background:${color};color:${color};box-shadow:0 0 15px currentColor`;
+      document.body.appendChild(firework);
+      setTimeout(() => firework.remove(), 800);
+    }, i * 80);
+  }
+}
+function triggerFireworksCelebration() {
+  const positions = [{x:window.innerWidth*0.2,y:window.innerHeight*0.3},{x:window.innerWidth*0.8,y:window.innerHeight*0.25},{x:window.innerWidth*0.5,y:window.innerHeight*0.15}];
+  positions.forEach((pos, index) => setTimeout(() => createFirework(pos.x, pos.y), index * 250));
+  setTimeout(triggerFireworksCelebration, 1800);
+}
+
+// ======================= API CALL =======================
+async function cekKelulusan() {
+  const nisnInput = document.getElementById('nisn').value.trim();
+  const btn = document.getElementById('btn');
+  const errorEl = document.getElementById('error');
+  
+  // Validation
+  if (!nisnInput) { showError('> ERR: NISN REQUIRED!'); return; }
+  if (nisnInput.length < 10) { showError('> ERR: NISN MIN 10 DIGITS!'); return; }
+  
+  // UI Loading State
+  btn.disabled = true;
+  btn.innerHTML = '[ EXECUTING... ]';
+  errorEl.style.display = 'none';
+  
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'flex';
+  startLoadingAnimation();
+  
+  try {
+    const url = new URL(API_ENDPOINT);
+    url.searchParams.set('nisn', nisnInput);
+    url.searchParams.set('_t', Date.now()); 
+    
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      mode: 'cors',
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+    
+    const result = await response.json();
+    
+    // Stop loading
+    stopLoadingAnimation();
+    loadingScreen.style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '[ INITIATE SCAN ]';
+    
+    // Handle response
+    if (result.status === 'success' && result.data) {
+      const siswa = result.data;
+      displayResult({
+        nama: siswa.nama,
+        nisn: siswa.nisn,
+        kelas: siswa.kelas,
+        rata: siswa.rata,      
+        foto: siswa.foto,
+        lulus: siswa.lulus,
+        badges: generateBadges(siswa.rata)
+      });
+      
+    } else if (result.status === 'not_found') {
+      showError('> ERR: 404 DATA NOT FOUND.');
+      shakeInput();
+    } else {
+      showError('> ERR: ' + (result.message || 'SERVER ERROR.'));
+    }
+    
+  } catch (error) {
+    stopLoadingAnimation();
+    loadingScreen.style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '[ INITIATE SCAN ]';
+    
+    if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+      showError('> ERR: CONNECTION FAILED.\nCHECK TARGET SERVER.');
+    } else {
+      showError('> ERR: ' + error.message);
+    }
+  }
+}
+
+function generateBadges(nilai) {
+  const badges = [];
+  if (nilai >= 90) badges.push('S-TIER', 'ACHIEVER');
+  else if (nilai >= 85) badges.push('A-TIER', 'SCHOLAR');
+  else if (nilai >= 80) badges.push('B-TIER');
+  if (nilai >= 75) badges.push('GOOD_REP');
+  else badges.push('FIGHTER');
+  return badges;
+}
+
+function showError(message) {
+  const errorEl = document.getElementById('error');
+  errorEl.innerText = message;
+  errorEl.style.display = 'block';
+  errorEl.setAttribute('aria-live', 'assertive');
+  setTimeout(() => { errorEl.style.display = 'none'; }, 3500);
+}
+
+function shakeInput() {
+  const input = document.getElementById('nisn');
+  input.style.transform = 'translateX(5px)';
+  setTimeout(() => input.style.transform = 'translateX(-5px)', 100);
+  setTimeout(() => input.style.transform = 'translateX(5px)', 200);
+  setTimeout(() => input.style.transform = 'translateX(0)', 300);
+}
+
+function displayResult(siswa) {
+  document.getElementById('nama').innerText = siswa.nama;
+  document.getElementById('nisnHasil').innerText = siswa.nisn;
+  document.getElementById('kelas').innerText = siswa.kelas;
+  
+  animateValue('rata', 0, siswa.rata, 1400);
+  
+  const fotoImg = document.getElementById('foto');
+  if (siswa.foto) fotoImg.src = siswa.foto;
+  fotoImg.onerror = function() { handleImageError(this); };
+  
+  displayBadges(siswa.badges || []);
+  
+  const statusDiv = document.getElementById('statusBox');
+  const encouragementBox = document.getElementById('encouragementBox');
+  
+  if (siswa.lulus) {
+    statusDiv.innerHTML = '>> LULUS DENGAN SUKSES <<';
+    statusDiv.className = 'status lulus animate-fade-in-up';
+    encouragementBox.style.display = 'none';
+    createConfetti(150);
+    triggerFireworksCelebration();
+    addCelebrateButton();
+    playSound('celebrate');
+  } else {
+    statusDiv.innerHTML = '>> MISSION FAILED <<';
+    statusDiv.className = 'status tidak-lulus animate-fade-in-up';
+    encouragementBox.style.display = 'block';
+    encouragementBox.classList.add('animate-fade-in-up');
+  }
+  
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('hasil').style.display = 'block';
+  document.querySelector('.chat-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function displayBadges(badges) {
+  const container = document.getElementById('badgeContainer');
+  container.innerHTML = '';
+  const badgeTypes = [
+    { keyword: 'S-TIER', class: 'prestasi', emoji: '✧' },
+    { keyword: 'TIER|ACHIEVER|SCHOLAR', class: 'akademik', emoji: '⚡' },
+    { keyword: 'REP|FIGHTER', class: 'karakter', emoji: '⬡' }
+  ];
+  badges.forEach((badge, index) => {
+    const badgeEl = document.createElement('span');
+    badgeEl.className = `badge animate-fade-in-up stagger-${index}`;
+    const type = badgeTypes.find(t => new RegExp(t.keyword, 'i').test(badge)) || badgeTypes[0];
+    badgeEl.classList.add(type.class);
+    badgeEl.innerHTML = `${type.emoji} [ ${badge} ]`;
+    container.appendChild(badgeEl);
+  });
+}
+
+function animateValue(id, start, end, duration) {
+  const element = document.getElementById(id);
+  const range = end - start;
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 4);
+    const current = start + (range * ease);
+    element.innerText = current.toFixed(2);
+    if (progress < 1) requestAnimationFrame(update);
+    else element.innerText = parseFloat(end).toFixed(2);
+  }
+  requestAnimationFrame(update);
+}
+
+function addCelebrateButton() {
+  const actionButtons = document.querySelector('.action-buttons');
+  if (!actionButtons) return;
+  if (document.getElementById('btnCelebrate')) return;
+  const celebrateBtn = document.createElement('button');
+  celebrateBtn.id = 'btnCelebrate';
+  celebrateBtn.className = 'btn-action celebrate';
+  celebrateBtn.innerHTML = '[ BOOST_FX ]';
+  celebrateBtn.onclick = () => {
+    createConfetti(100);
+    triggerFireworksCelebration();
+    playSound('celebrate');
+    celebrateBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => celebrateBtn.style.transform = '', 150);
+  };
+  actionButtons.appendChild(celebrateBtn);
+}
+
+// ======================= SOUND SYSTEM =======================
+let soundEnabled = true;
+let audioContext = null;
+function initAudio() {
+  try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); }
+  catch (e) { console.log('Audio API unvailable'); }
+}
+function playSound(type) {
+  if (!soundEnabled || !audioContext) return;
+  try {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.type = 'square'; // chiptune/8-bit sound
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    if (type === 'celebrate') {
+      const notes = [440, 554.37, 659.25, 880];
+      let time = audioContext.currentTime;
+      notes.forEach((freq, i) => {
+        oscillator.frequency.setValueAtTime(freq, time + i * 0.1);
+        gainNode.gain.setValueAtTime(0.1, time + i * 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, time + i * 0.1 + 0.2);
+      });
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+  } catch (e) { console.log('Audio playback failed'); }
+}
+function toggleSound() {
+  const toggle = document.getElementById('soundToggle');
+  soundEnabled = !soundEnabled;
+  toggle.classList.toggle('muted', !soundEnabled);
+  toggle.innerHTML = soundEnabled ? '🔊' : '🔇';
+  toggle.setAttribute('aria-label', soundEnabled ? 'Mute' : 'Unmute');
+  if (soundEnabled && audioContext && audioContext.state === 'suspended') audioContext.resume();
+}
+
+// ======================= SHARE & DOWNLOAD =======================
+function shareResult() {
+  const nama = document.getElementById('nama').innerText;
+  const status = document.getElementById('statusBox').innerText;
+  const nilai = document.getElementById('rata').innerText;
+  const shareText = `>> HASIL KELULUSAN <<\n\n[USER]: ${nama}\n[SCORE]: ${nilai}\n[STATUS]: ${status}\n\nSYS.VER 2026 SMP GEMILANG`;
+  if (navigator.share) {
+    navigator.share({ title: 'Data Kelulusan', text: shareText, url: window.location.href }).catch(console.log);
+  } else {
+    navigator.clipboard.writeText(shareText).then(() => showToast('DATA COPIED TO CLIPBOARD!'));
+  }
+}
+function downloadCertificate() { showToast('ERR: MODULE NOT FOUND!'); }
+function showToast(message) {
+  const existing = document.getElementById('toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'toast';
+  toast.style.cssText = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:var(--neon-cyan);border:1px solid var(--neon-cyan);padding:12px 20px;font-family:var(--font-mono);font-size:0.85rem;z-index:100000;box-shadow:0 0 10px var(--neon-cyan);animation:toastSlide 0.3s ease-out`;
+  toast.innerHTML = message;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2000);
+}
+
+// ======================= RESET APP =======================
+function resetApp() {
+  document.getElementById('confetti-container').innerHTML = '';
+  document.getElementById('nisn').value = '';
+  document.getElementById('nisn').focus();
+  document.getElementById('overlay').style.display = 'flex';
+  document.getElementById('hasil').style.display = 'none';
+  document.getElementById('error').style.display = 'none';
+  document.getElementById('badgeContainer').innerHTML = '';
+  document.getElementById('encouragementBox').style.display = 'none';
+  const celebrateBtn = document.getElementById('btnCelebrate');
+  if (celebrateBtn) celebrateBtn.remove();
+  const statusBox = document.getElementById('statusBox');
+  statusBox.className = 'status';
+  statusBox.innerHTML = 'WAITING VERIFICATION...';
+  document.getElementById('foto').src = '';
+  document.getElementById('rata').innerText = '0.00';
+}
+
+// ======================= INITIALIZATION =======================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('soundToggle').addEventListener('click', toggleSound);
+  ['click', 'touchstart'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      if (!audioContext) initAudio();
+      if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+    }, { once: true });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.getElementById('hasil').style.display === 'block') resetApp();
+  });
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) stopLoadingAnimation(); });
+</script>
+</body>
+</html>
