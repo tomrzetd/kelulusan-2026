@@ -295,6 +295,73 @@ header {
 .firework { position: fixed; width: 4px; height: 4px; border-radius: 50%; pointer-events: none; z-index: 99998; animation: fireworkExplode 1s ease-out forwards; }
 @keyframes fireworkExplode { 0%{transform:scale(1);opacity:1;box-shadow:0 0 0 0 currentColor,0 0 0 0 currentColor,0 0 0 0 currentColor,0 0 0 0 currentColor,0 0 0 0 currentColor} 50%{opacity:1;box-shadow:-30px -30px 0 2px currentColor,30px -30px 0 2px currentColor,-30px 30px 0 2px currentColor,30px 30px 0 2px currentColor,0 -50px 0 2px currentColor} 100%{transform:scale(0);opacity:0} }
 
+
+/* ===== COUNTDOWN GATE: akses dibuka 2 Juni 2026 pukul 19:00 WIB ===== */
+.countdown-gate {
+  margin: 0 0 24px;
+  padding: 18px 14px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 207, 0, 0.45);
+  box-shadow: inset 0 0 22px rgba(255, 207, 0, 0.06), 0 0 18px rgba(255, 207, 0, 0.08);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+.countdown-gate.open {
+  border-color: rgba(57, 255, 20, 0.55);
+  box-shadow: inset 0 0 22px rgba(57, 255, 20, 0.08), 0 0 18px rgba(57, 255, 20, 0.12);
+}
+.countdown-title {
+  font-family: var(--font-mono);
+  color: var(--neon-gold);
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.countdown-gate.open .countdown-title { color: var(--neon-green); }
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.countdown-cell {
+  padding: 10px 4px;
+  background: rgba(255, 207, 0, 0.06);
+  border: 1px solid rgba(255, 207, 0, 0.28);
+}
+.countdown-gate.open .countdown-cell {
+  background: rgba(57, 255, 20, 0.06);
+  border-color: rgba(57, 255, 20, 0.28);
+}
+.countdown-number {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255, 207, 0, 0.55);
+  line-height: 1;
+}
+.countdown-gate.open .countdown-number { text-shadow: 0 0 12px rgba(57, 255, 20, 0.55); }
+.countdown-label {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.countdown-info {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+.countdown-info strong { color: var(--neon-gold); font-weight: normal; }
+.countdown-gate.open .countdown-info strong { color: var(--neon-green); }
+
 @media (max-width: 480px) {
   .app { margin: 0; border: none; min-height: 100vh; border-radius: 0; clip-path: none; }
   .login-box { padding: 20px 10px; }
@@ -326,7 +393,18 @@ header {
     <div class="login-box">
       <div class="sys-icon">⬡</div>
       <h2>SECURE ACCESS</h2>
-      <p>DATABASE.SYS <strong>2026</strong> // SMP_GEMILANG</p>
+      <p>DATABASE.SYS <strong>2026</strong> // SMPN 2 JALAKSANA</p>
+
+      <div class="countdown-gate" id="countdownGate" aria-live="polite">
+        <div class="countdown-title" id="countdownTitle">>> ACCESS LOCKED UNTIL RELEASE TIME</div>
+        <div class="countdown-grid" aria-label="Hitung mundur pembukaan akses kelulusan">
+          <div class="countdown-cell"><span class="countdown-number" id="cdDays">00</span><span class="countdown-label">Hari</span></div>
+          <div class="countdown-cell"><span class="countdown-number" id="cdHours">00</span><span class="countdown-label">Jam</span></div>
+          <div class="countdown-cell"><span class="countdown-number" id="cdMinutes">00</span><span class="countdown-label">Menit</span></div>
+          <div class="countdown-cell"><span class="countdown-number" id="cdSeconds">00</span><span class="countdown-label">Detik</span></div>
+        </div>
+        <div class="countdown-info" id="countdownInfo">Akses data kelulusan dibuka pada <strong>Selasa, 2 Juni 2026 pukul 19:00 WIB</strong>.</div>
+      </div>
       
       <div class="input-group">
         <input type="number" id="nisn" class="login-input" placeholder="[ INPUT NISN ]" autofocus onkeypress="handleKeyPress(event)" aria-label="Nomor Induk Siswa Nasional">
@@ -397,6 +475,63 @@ header {
 // DIBIARKAN SAMA PERSIS SESUAI LOGIKA ASLI
 const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzTdArNCRV0pgRx8DwOj9ABcIWGiJDJFVaAsHLbQEsfrjDDktg05Cvc0J3RUzNnzFlWGw/exec';
 
+// Gate countdown: akses data kelulusan dibuka Selasa, 2 Juni 2026 pukul 19:00 WIB.
+const RELEASE_TIME_WIB = new Date('2026-06-02T19:00:00+07:00');
+let countdownTimer = null;
+
+
+// ======================= COUNTDOWN ACCESS GATE =======================
+function padCountdownNumber(value) { return String(value).padStart(2, '0'); }
+function isPortalOpen() { return Date.now() >= RELEASE_TIME_WIB.getTime(); }
+function updateCountdownGate() {
+  const gate = document.getElementById('countdownGate');
+  const title = document.getElementById('countdownTitle');
+  const info = document.getElementById('countdownInfo');
+  const btn = document.getElementById('btn');
+  const input = document.getElementById('nisn');
+  const remaining = RELEASE_TIME_WIB.getTime() - Date.now();
+
+  if (!gate || !title || !info || !btn || !input) return;
+
+  if (remaining <= 0) {
+    document.getElementById('cdDays').innerText = '00';
+    document.getElementById('cdHours').innerText = '00';
+    document.getElementById('cdMinutes').innerText = '00';
+    document.getElementById('cdSeconds').innerText = '00';
+    gate.classList.add('open');
+    title.innerText = '>> ACCESS OPEN // DATA LINK READY';
+    info.innerHTML = 'Portal kelulusan sudah dibuka. Silakan masukkan NISN untuk mengakses data.';
+    btn.disabled = false;
+    btn.innerHTML = '[ INITIATE SCAN ]';
+    input.disabled = false;
+    input.placeholder = '[ INPUT NISN ]';
+    if (countdownTimer) clearInterval(countdownTimer);
+    return;
+  }
+
+  const totalSeconds = Math.floor(remaining / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  document.getElementById('cdDays').innerText = padCountdownNumber(days);
+  document.getElementById('cdHours').innerText = padCountdownNumber(hours);
+  document.getElementById('cdMinutes').innerText = padCountdownNumber(minutes);
+  document.getElementById('cdSeconds').innerText = padCountdownNumber(seconds);
+  gate.classList.remove('open');
+  title.innerText = '>> ACCESS LOCKED UNTIL RELEASE TIME';
+  info.innerHTML = 'Akses data kelulusan dibuka pada <strong>Selasa, 2 Juni 2026 pukul 19:00 WIB</strong>.';
+  btn.disabled = true;
+  btn.innerHTML = '[ ACCESS LOCKED ]';
+  input.disabled = true;
+  input.placeholder = '[ WAIT UNTIL 19:00 WIB ]';
+}
+function startCountdownGate() {
+  updateCountdownGate();
+  if (!isPortalOpen()) countdownTimer = setInterval(updateCountdownGate, 1000);
+}
+
 // ======================= UTILITIES =======================
 function handleImageError(imgElement) {
   const namaSiswa = document.getElementById('nama')?.innerText || 'Siswa';
@@ -466,6 +601,7 @@ function triggerFireworksCelebration() {
 
 // ======================= API CALL =======================
 async function cekKelulusan() {
+  if (!isPortalOpen()) { updateCountdownGate(); showError('> ACCESS LOCKED: DATA DIBUKA PUKUL 19:00 WIB.'); return; }
   const nisnInput = document.getElementById('nisn').value.trim();
   const btn = document.getElementById('btn');
   const errorEl = document.getElementById('error');
@@ -738,6 +874,7 @@ function resetApp() {
 
 // ======================= INITIALIZATION =======================
 document.addEventListener('DOMContentLoaded', () => {
+  startCountdownGate();
   document.getElementById('soundToggle').addEventListener('click', toggleSound);
   ['click', 'touchstart'].forEach(evt => {
     document.addEventListener(evt, () => {
